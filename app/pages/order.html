@@ -1,0 +1,128 @@
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodExpress - Orders</title>
+     <link rel="stylesheet" href="styles.css">
+ </head>
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <div class="brand-lockup">
+                <div class="brand-mark">F</div>
+                <div>
+                    <div class="brand-name">FoodExpress</div>
+                    <div class="brand-tagline">Track active orders</div>
+                </div>
+             </div>
+            <nav class="topnav">
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="order.html" class="active">Orders</a>
+            </nav>
+        </header>
+
+        <main class="content-wrap">
+            <section class="section-head">
+                <div>
+                    <span class="eyebrow">Order flow</span>
+                    <h1>See what is preparing, moving, and delivered.</h1>
+                </div>
+                <p>
+                    This page simulates the operational view a delivery app would use for order tracking and status review.
+                </p>
+            </section>
+
+            <section class="grid-2">
+                <article class="panel order-tracker">
+                    <h2>Current delivery</h2>
+                    <div class="current-order">
+                        <div>
+                            <span class="eyebrow">Order FEX-2048</span>
+                            <h3>Charred Chicken Rice</h3>
+                            <p>Customer: Sok Ly</p>
+                        </div>
+                        <strong>On the way</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: 72%;"></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span>Confirmed</span>
+                        <span>Preparing</span>
+                        <span>Rider assigned</span>
+                        <span>Delivered</span>
+                    </div>
+                </article>
+
+                <article class="panel order-tracker accent-panel">
+                    <h2>Recent delivery stats</h2>
+                    <div class="status-row">
+                        <span>Active riders</span>
+                        <strong id="rider-count">14</strong>
+                    </div>
+                    <div class="status-row">
+                        <span>Orders processed</span>
+                        <strong id="order-count">146</strong>
+                    </div>
+                    <div class="status-row">
+                        <span>Average ETA</span>
+                        <strong id="eta-value">22 min</strong>
+                    </div>
+                </article>
+            </section>
+
+            <section class="panel table-frame">
+                <h2>Order board</h2>
+                <div id="orders-table"></div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const ordersTable = document.getElementById('orders-table');
+
+        fetch('/api/orders')
+            .then((response) => response.json())
+            .then((orders) => {
+                ordersTable.innerHTML = `
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Customer</th>
+                                <th>Item</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${orders.map((order) => `
+                                <tr>
+                                    <td>${order.id}</td>
+                                    <td>${order.customer}</td>
+                                    <td>${order.item}</td>
+                                    <td><span class="tag">${order.status}</span></td>
+                                    <td>$${order.total.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            })
+            .catch(() => {
+                ordersTable.innerHTML = '<div class="empty-state">Order data is unavailable right now.</div>';
+            });
+
+        fetch('/api/overview')
+            .then((response) => response.json())
+            .then((data) => {
+                document.getElementById('rider-count').textContent = data.activeRiders;
+                document.getElementById('order-count').textContent = data.ordersToday;
+                document.getElementById('eta-value').textContent = data.avgDelivery;
+            });
+    </script>
+ </body>
+ </html>

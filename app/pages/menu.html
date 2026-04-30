@@ -1,0 +1,98 @@
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodExpress - Menu</title>
+     <link rel="stylesheet" href="styles.css">
+ </head>
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <div class="brand-lockup">
+                <div class="brand-mark">F</div>
+                <div>
+                    <div class="brand-name">FoodExpress</div>
+                    <div class="brand-tagline">Browse the menu</div>
+                </div>
+             </div>
+            <nav class="topnav">
+                <a href="index.html">Home</a>
+                <a href="menu.html" class="active">Menu</a>
+                <a href="order.html">Orders</a>
+            </nav>
+        </header>
+
+        <main class="content-wrap">
+            <section class="section-head">
+                <div>
+                    <span class="eyebrow">Menu simulation</span>
+                    <h1>Browse featured dishes and delivery times.</h1>
+                </div>
+                <p>
+                    The menu API feeds this page with a live-ish catalog of dishes, restaurants, categories, and ETA data.
+                </p>
+            </section>
+
+            <section class="grid-2">
+                <article class="panel menu-summary">
+                    <h2>Why this menu is useful</h2>
+                    <p>
+                        It simulates the browsing experience of a delivery app by pairing each item with a restaurant,
+                        a service badge, and a quoted delivery window.
+                    </p>
+                    <div class="summary-stats">
+                        <div>
+                            <strong>5</strong>
+                            <span>items</span>
+                        </div>
+                        <div>
+                            <strong>3</strong>
+                            <span>restaurants</span>
+                        </div>
+                        <div>
+                            <strong>5</strong>
+                            <span>categories</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="panel menu-summary highlight-card">
+                    <h2>Top delivery promise</h2>
+                    <p>Most dishes are positioned under 25 minutes with clear status labels for quick scanning.</p>
+                    <a href="grades.html" class="button primary inline-button">See order flow</a>
+                </article>
+            </section>
+
+            <section class="menu-grid" id="menu-grid"></section>
+        </main>
+    </div>
+
+    <script>
+        const menuGrid = document.getElementById('menu-grid');
+
+        fetch('/api/menu')
+            .then((response) => response.json())
+            .then((items) => {
+                menuGrid.innerHTML = items.map((item) => `
+                    <article class="menu-card panel">
+                        <div class="menu-card-top">
+                            <span class="tag">${item.badge}</span>
+                            <span class="eta">${item.eta}</span>
+                        </div>
+                        <h3>${item.name}</h3>
+                        <p class="restaurant">${item.restaurant}</p>
+                        <p class="category">${item.category}</p>
+                        <div class="menu-card-bottom">
+                            <strong>$${item.price.toFixed(2)}</strong>
+                            <button class="button secondary" type="button">Add to cart</button>
+                        </div>
+                    </article>
+                `).join('');
+            })
+            .catch(() => {
+                menuGrid.innerHTML = '<article class="panel empty-state">Menu data is unavailable right now.</article>';
+            });
+    </script>
+ </body>
+ </html>

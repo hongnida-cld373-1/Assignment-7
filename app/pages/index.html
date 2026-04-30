@@ -1,0 +1,119 @@
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodExpress - Home</title>
+     <link rel="stylesheet" href="styles.css">
+ </head>
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <div class="brand-lockup">
+                <div class="brand-mark">F</div>
+                <div>
+                    <div class="brand-name">FoodExpress</div>
+                    <div class="brand-tagline">Delivery simulation</div>
+                </div>
+             </div>
+            <nav class="topnav">
+                <a href="index.html" class="active">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="order.html">Orders</a>
+            </nav>
+        </header>
+
+        <main class="content-wrap">
+            <section class="hero panel">
+                <div class="hero-copy">
+                    <span class="eyebrow">Live food delivery sandbox</span>
+                    <h1>Fast meals, dispatched like a real marketplace.</h1>
+                    <p>
+                        FoodExpress is a lightweight simulation of an online food delivery platform with menu browsing,
+                        order tracking, and live operational stats exposed through the API.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="courses.html" class="button primary">Browse menu</a>
+                        <a href="grades.html" class="button secondary">Track orders</a>
+                    </div>
+                </div>
+                <div class="hero-card panel-soft">
+                    <div class="mini-stat">
+                        <span>Average delivery</span>
+                        <strong id="avg-delivery">22 min</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span>Restaurants online</span>
+                        <strong id="restaurants-online">28</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span>Riders active</span>
+                        <strong id="active-riders">14</strong>
+                     </div>
+                 </div>
+            </section>
+
+            <section class="metrics-grid">
+                <article class="metric-card panel-soft">
+                    <span class="metric-label">Orders today</span>
+                    <strong id="orders-today">146</strong>
+                    <p>Realistic order volume for a busy lunch and dinner window.</p>
+                </article>
+                <article class="metric-card panel-soft">
+                    <span class="metric-label">Delivery promise</span>
+                    <strong>Under 30 min</strong>
+                    <p>Urban routes are optimized for quick dispatch and live rider assignment.</p>
+                </article>
+                <article class="metric-card panel-soft">
+                    <span class="metric-label">Cuisine coverage</span>
+                    <strong>5 categories</strong>
+                    <p>Rice bowls, noodles, wraps, burgers, and desserts are in the simulated catalog.</p>
+                </article>
+            </section>
+
+            <section class="grid-2">
+                <article class="panel feature-panel">
+                    <h2>What the simulation shows</h2>
+                    <ul class="feature-list">
+                        <li>Menu cards with prices, prep time, and restaurant source.</li>
+                        <li>Order lifecycle states from preparing to delivered.</li>
+                        <li>API endpoints for menu, orders, restaurants, and summary stats.</li>
+                    </ul>
+                </article>
+
+                <article class="panel feature-panel accent-panel">
+                    <h2>Live snapshot</h2>
+                    <div class="status-row">
+                        <span>Platform status</span>
+                        <strong>Online</strong>
+                    </div>
+                    <div class="status-row">
+                        <span>Nearest rider</span>
+                        <strong>Dara - 6 min away</strong>
+                    </div>
+                    <div class="status-row">
+                        <span>Top restaurant</span>
+                        <strong>Street Flame Kitchen</strong>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        fetch('/api/overview')
+            .then((response) => response.json())
+            .then((data) => {
+                document.getElementById('avg-delivery').textContent = data.avgDelivery;
+                document.getElementById('restaurants-online').textContent = data.restaurantsOnline;
+                document.getElementById('active-riders').textContent = data.activeRiders;
+                document.getElementById('orders-today').textContent = data.ordersToday;
+            })
+            .catch(() => {
+                document.getElementById('avg-delivery').textContent = '22 min';
+            });
+    </script>
+ </body>
+ </html>
+ 
